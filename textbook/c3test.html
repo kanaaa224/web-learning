@@ -1,0 +1,140 @@
+<!-- <!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>テストのWebページ</title>
+    </head>
+    <body>
+        <script>
+            window.alert('印刷します');
+            window.print();
+        </script>
+    </body>
+</html> -->
+
+<!-- <!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>テストのWebページ</title>
+    </head>
+    <body>
+        <script>
+            var ans = window.confirm('印刷してもいい？');
+            if(ans) window.print();
+        </script>
+    </body>
+</html> -->
+
+<!-- <!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>テストのWebページ</title>
+    </head>
+    <body>
+        <script>
+            var ans = window.prompt('数を入力して');
+            ans = parseInt(ans);
+            if(ans > 5) window.alert('5 より大きい');
+            else        window.alert('5 以下');
+        </script>
+    </body>
+</html> -->
+
+<!-- <!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>テストのWebページ</title>
+    </head>
+    <body>
+        <script>
+            var sum   = 0;
+            var shiki = '0';
+            for(var i = 0; i <= 10; i++) {
+                sum   = sum + i;
+                shiki = shiki + '+' + i;
+                window.document.write('<p>' + shiki + ' = ' + sum + '</p>');
+            }
+        </script>
+    </body>
+</html> -->
+
+<!-- <!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>テストのWebページ</title>
+    </head>
+    <body>
+        <script>
+            var youbi = [ '日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日' ];
+            for(var i = 0; i < 7; i++) {
+                document.write('<p>' + youbi[i] + '</p>');
+            }
+        </script>
+    </body>
+</html> -->
+
+<!-- <!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>テストのWebページ</title>
+    </head>
+    <body>
+        <script>
+            var youbi = [ '日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日' ];
+            for(var i = 0; i < 7; i++) {
+                var date = new Date(2018, 0, i);
+                document.write('<p>' + date.toDateString() + 'は' + youbi[date.getDay()] + '</p>');
+            }
+        </script>
+    </body>
+</html> -->
+
+<!-- <!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>テストのWebページ</title>
+    </head>
+    <body>
+        <script>
+            function getYoubi(year, month, day) {
+                var youbi = [ '日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日' ];
+                var date  = new Date(year, month - 1, day);
+                return youbi[date.getDay()];
+            }
+
+            document.write('<p>' + '1985年3月10日' + 'は' + getYoubi(1985, 3, 10) + '</p>');
+            document.write('<p>' + '2001年3月10日' + 'は' + getYoubi(2001, 3, 10) + '</p>');
+            document.write('<p>' + '2018年3月10日' + 'は' + getYoubi(2018, 3, 10) + '</p>');
+        </script>
+    </body>
+</html> -->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>テストのWebページ</title>
+    </head>
+    <body>
+        <script>
+            function getYoubi(year, month, day) {
+                if(month < 0) return 'そんな月はない';
+
+                var youbi = [ '日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日' ];
+                var date  = new Date(year, month - 1, day);
+
+                return youbi[date.getDay()];
+            }
+
+            document.write('<p>' + '1985年-1月10日' + 'は' + getYoubi(1985, -1, 10) + '</p>');
+            document.write('<p>' + '2001年3月10日' + 'は' + getYoubi(2001, 3, 10) + '</p>');
+            document.write('<p>' + '2018年3月10日' + 'は' + getYoubi(2018, 3, 10) + '</p>');
+        </script>
+    </body>
+</html>
