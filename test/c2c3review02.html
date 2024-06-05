@@ -6,8 +6,37 @@
     </head>
     <body>
         <script>
-		//ここに課題の解答を入力してください！
-        //入力がなかった場合の処理は、「年齢に何も入っていなければ(null)」という条件式を組んでください！
+            class App {
+                constructor() {
+                    this.judging();
+                }
+
+                judging() {
+                    let age     = '';
+                    let message = '';
+
+                    age = window.prompt('年齢を入力してください', '');
+
+                    if(age == '') {
+                        window.alert('年齢が入力されていません');
+
+                        return this.judging();
+                    }
+
+                    age = parseInt(age);
+
+                    if(age >= 0 && age <= 17)       message = age + '歳は「未成年」です。';
+                    else if(age >= 18 && age <= 64) message = age + '歳は「成人」です。';
+                    else if(age >= 65 && age <= 99) message = age + '歳は「高齢者」です。';
+                    else if(age >= 100)             message = age + '歳以上は「ご長寿」です。長生きしてください。';
+
+                    document.write('<p>' + message + '</p>');
+
+                    return true;
+                }
+            }
+
+            const app = new App();
         </script>
     </body>
 </html>
