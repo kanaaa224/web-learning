@@ -16,8 +16,8 @@
                     let list = [];
 
                     for(let i = 0; i < team.length; i++) {
-                        for(let j = 0; j < team.length; j++) {
-                            if(i != j) list.push(team[i] + ' vs ' + team[j]);
+                        for(let j = i + 1; j < team.length; j++) {
+                            list.push(team[i] + ' vs ' + team[j]);
                         }
                     }
 
