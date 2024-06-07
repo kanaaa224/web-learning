@@ -6,7 +6,35 @@
     </head>
     <body>
         <script>
-        //ここに課題の解答を入力してください！  
+            class App {
+                constructor() {
+                    this.output(this.pow(parseInt(window.prompt('塁乗させたい数値を入力してください', '')), parseInt(window.prompt('塁乗させる回数を入力してください', ''))));
+                }
+
+                // 引数による累乗の結果を配列で返す
+                pow(num = 0, times = 0) {
+                    let ans = [];
+
+                    for(let i = 1; i <= times; i++) {
+                        ans.push(num ** i);
+                    }
+
+                    return ans;
+                }
+
+                // 引数で渡された配列の要素をpタグでdomに出力
+                output(content = []) {
+                    if(!Array.isArray(content)) return false;
+
+                    for(let i = 0; i < content.length; i++) {
+                        document.write('<p>' + content[i] + '</p>');
+                    }
+
+                    return true;
+                }
+            }
+
+            const app = new App();
         </script>
     </body>
 </html>
