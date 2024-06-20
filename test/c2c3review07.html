@@ -5,10 +5,69 @@
         <title>Chapter2とChapter3の復習07</title>
     </head>
     <body>
-		<h2></h2>
         <script>
-        	//ここに課題の解答を入力してください！
-            //「三角形の面積を求める関数」を作成し、作成した関数を使って質問内容と回答内容をドキュメントで表示するようにしてください！
+            class App {
+                constructor() {
+                    this.output([
+                        {
+                            'tag': 'h1',
+                            'content': '関数を作って三角形の面積を求める'
+                        },
+                        {
+                            'tag': 'h2',
+                            'content': ('この三角形の面積は「' + this.calculateArea(this.askBaseAndHeight()) + '」です。')
+                        }
+                    ]);
+                }
+
+                // プロンプトで底辺と高さを聞く
+                askBaseAndHeight() {
+                    let inputs = [];
+
+                    for(let i = 0; i < 2; i++) {
+                        while(true) {
+                            let questions = [
+                                '底辺を数字で入力してください',
+                                '高さを数字で入力してください'
+                            ];
+
+                            let input = '';
+                            
+                            input = window.prompt(questions[i], '');
+
+                            if(!input || isNaN(input) || input == null || input == '') {
+                                window.alert('数値を入力してください');
+                            } else {
+                                inputs[i] = input;
+                                break;
+                            }
+                        }
+                    }
+
+                    return { 'base': inputs[0], 'height': inputs[1] };
+                }
+
+                // 底辺と高さから面積を求める
+                calculateArea(size = {}) {
+                    size.base   = size.base   ? size.base   : 0;
+                    size.height = size.height ? size.height : 0;
+
+                    return (size.base * size.height) / 2;
+                }
+
+                // domに出力
+                output(contents = []) {
+                    if(!Array.isArray(contents)) return false;
+
+                    for(let i = 0; i < contents.length; i++) {
+                        document.write('<' + contents[i].tag + '>' + contents[i].content + '</' + contents[i].tag + '>');
+                    }
+
+                    return true;
+                }
+            }
+
+            const app = new App();
         </script>
     </body>
 </html>
