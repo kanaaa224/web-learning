@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Chapter2とChapter3の復習06</title>
+    </head>
+    <body>
+        <script>
+            class App {
+                constructor() {
+                    this.Shitsumon([
+                        {
+                            'question': '好きな食べ物はなんですか？',
+                            'reply': (answer = '') => { return '「' + answer + '」ですか！いっしょですね'; }
+                        },
+                        {
+                            'question': '苦手な食べ物はなんですか？',
+                            'reply': (answer = '') => { return '「' + answer + '」とは… 意外です'; }
+                        },
+                        {
+                            'question': '行きたい国はどこですか？',
+                            'reply': (answer = '') => { return '「' + answer + '」ですか！いつか行けるといいですね！'; }
+                        },
+                        {
+                            'question': '明日の予定はなんですか？',
+                            'reply': (answer = '') => { return '「' + answer + '」ですか！それは楽しみですね！'; }
+                        },
+                        {
+                            'question': '今年の目標はなんですか？',
+                            'reply': (answer = '') => { return 'ほほう「' + answer + '」ですか！ぜひ達成してください！'; }
+                        },
+                        {
+                            'question': '休日はどうしますか？',
+                            'reply': (answer = '') => { return '「' + answer + '」いいですね！今度誘ってください！'; }
+                        }
+                    ]);
+                }
+
+                // 質問して回答させ、返答を表示する
+                Shitsumon(questions = [], questionID = 0) {
+                    let input = '';
+
+                    input = window.prompt(questions[questionID].question, '');
+
+                    switch(input) {
+                        case null: {
+                            window.alert('そうですか、また次回教えてください');
+                            break;
+                        }
+
+                        case '': {
+                            window.alert('スミマセン、よくわかりません');
+                            break;
+                        }
+
+                        default: {
+                            window.alert(questions[questionID].reply(input));
+                            break;
+                        }
+                    }
+
+                    if(questions.length > (questionID + 1)) this.Shitsumon(questions, (questionID + 1));
+
+                    return true;
+                }
+            }
+
+            const app = new App();
+        </script>
+    </body>
+</html>

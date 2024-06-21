@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Chapter2とChapter3の復習08</title>
+    </head>
+    <body>
+        <script>
+            class App {
+                constructor() {
+                    // 各生徒の点数
+                    let scores = [
+                        {
+                            'name': 'A',
+                            'intermediate': 80,
+                            'finalExam': 50
+                        },
+                        {
+                            'name': 'B',
+                            'intermediate': 40,
+                            'finalExam': 70
+                        }
+                    ];
+
+                    // 各生徒の判定された成績
+                    let grades = [
+                        this.grading(scores[0]) ? '合格' : '不合格',
+                        this.grading(scores[1]) ? '合格' : '不合格'
+                    ]
+
+                    this.output([
+                        {
+                            'tag': 'h1',
+                            'content': '関数を作って成績を判定する'
+                        },
+                        {
+                            'tag': 'h2',
+                            'content': (scores[0].name + 'さんは' + grades[0] + 'です')
+                        },
+                        {
+                            'tag': 'h2',
+                            'content': (scores[1].name + 'さんは' + grades[1] + 'です')
+                        }
+                    ]);
+                }
+
+                // 点数から各生徒の成績を判定
+                grading(score = {}) {
+                    score.name         = score.name         ? score.name         : '';
+                    score.intermediate = score.intermediate ? score.intermediate : 0;
+                    score.finalExam    = score.finalExam    ? score.finalExam    : 0;
+
+                    let avg = (score.intermediate + score.finalExam) / 2;
+
+                    return (avg >= 60);
+                }
+
+                // domに出力
+                output(contents = []) {
+                    if(!Array.isArray(contents)) return false;
+
+                    for(let i = 0; i < contents.length; i++) {
+                        document.write('<' + contents[i].tag + '>' + contents[i].content + '</' + contents[i].tag + '>');
+                    }
+
+                    return true;
+                }
+            }
+
+            const app = new App();
+        </script>
+    </body>
+</html>
