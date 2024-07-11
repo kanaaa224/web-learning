@@ -1,0 +1,20 @@
+@charset "UTF-8";
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+
+    overflow: hidden hidden;
+
+    font-family: sans-serif;
+}
+
+main .container div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
