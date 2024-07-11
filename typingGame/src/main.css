@@ -18,3 +18,7 @@ main .container div {
     justify-content: center;
     align-items: center;
 }
+
+main .container .opacity05 {
+    opacity: 0.5;
+}
