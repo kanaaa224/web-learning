@@ -92,7 +92,7 @@ class App {
 
                     this.typingGame_data.currentQuestionIndex = 0;
 
-                    this.typingGame_data.answer = [];
+                    this.typingGame_data.enteredKeys = [];
 
                     this.startTypingGame();
                 }
@@ -117,21 +117,73 @@ class App {
             this.eventHandlers = [];
         }
 
+        // 問題表示関数
+        let renderingQuestion = () => {
+            if(!this.typingGame_data.questionContents) return false;
+
+            let questionContent = this.typingGame_data.questionContents[this.typingGame_data.currentQuestionIndex].characters;
+            if(!questionContent) return false;
+
+            this.typingGame_data.enteredKeys = [ 'w', 'a', 'g', 'a', 'h', 's', 'i', 'h', 'a' ];
+
+            let textString   = ''; // 表示する問題文（例: 吾輩は猫である）
+            let romajiString = ''; // 表示するローマ文字列（例: wagahaihanekodearu）
+
+            let state = 0; // 解答状態（1: 正解 / 2: 未回答 / 3: ミス）
+
+            let checkedEnterdKeyIndex = 0; // 入力済みキーのチェック済みインデックス
+
+            for(let i = 0; i < questionContent.length; i++) {
+                if(state <= 1) {
+                    let romajiArray = questionContent[i].romaji.split(''); // 'waga' -> [ 'w', 'a', 'g', 'a' ]
+
+                    for(let j = 0; j < romajiArray.length; j++) {
+                        if(!this.typingGame_data.enteredKeys[checkedEnterdKeyIndex]) {
+                            state = 2;
+                        } else if(romajiArray[j] == this.typingGame_data.enteredKeys[checkedEnterdKeyIndex]) {
+                            checkedEnterdKeyIndex++;
+                            state = 1;
+                        } else {
+                            state = 3;
+                        }
+                    }
+                }
+
+                console.log(state);
+
+                let option_begin = '';
+                let option_end   = '';
+
+                option_begin = state == 2 ? '<span class="opacity05">' : option_begin;
+                option_end   = state == 2 ? '</span>' : option_end;
+                option_begin = state == 3 ? '<span class="colorRed">' : option_begin;
+                option_end   = state == 3 ? '</span>' : option_end;
+                
+                textString   += option_begin + questionContent[i].text + option_end;
+                romajiString += option_begin + questionContent[i].romaji + option_end;
+
+                if(state == 3) state = 2;
+            }
+            
+            document.querySelector('.typingGame h2').innerHTML = textString;
+            document.querySelector('.typingGame p') .innerHTML = romajiString;
+        };
+
+        renderingQuestion();
+
         // キー入力イベントを追加
         let eventHandler = {
             'typeName': 'keydown',
             'callback': event => {
                 if(event.key === 'Escape') return this.endTypingGame();
-                console.log(event.keyCode);
+                console.log(event.key);
+                //console.log('error: 出題データがありません');
             }
         };
 
         this.eventHandlers[1] = eventHandler;
 
         document.addEventListener(eventHandler.typeName, eventHandler.callback);
-
-        document.querySelector('.typingGame h2').innerHTML = this.typingGame_data.questionContents[0].string;
-        //for(let i = 0; i < this.typingGame_data.questionContents[0])
 
         // タイムを表示するため更新と表示のインターバルを登録
         this.intervals.push(setInterval(() => {
@@ -151,8 +203,6 @@ class App {
         }, 10));
 
         // UIを更新
-        document.querySelector('.typingGame p') .innerHTML = '';
-
         document.querySelector('.typingGame button').setAttribute('onclick', 'app.endTypingGame();');
         document.querySelector('.typingGame button').innerHTML = '終わる(Escapeキーでも終了できます)';
 

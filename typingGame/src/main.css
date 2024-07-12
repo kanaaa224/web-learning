@@ -22,3 +22,17 @@ main .container div {
 main .container .opacity05 {
     opacity: 0.5;
 }
+
+main .container .colorRed {
+    color: red;
+}
+
+main .container .typingGame {
+    h2 {
+        margin: 2rem 0 0 0;
+    }
+
+    p {
+        margin: 0 0 2rem 0;
+    }
+}
