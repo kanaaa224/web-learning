@@ -92,7 +92,7 @@ class App {
 
                     this.typingGame_data.currentQuestionIndex = 0;
 
-                    this.typingGame_data.enteredKeys = [];
+                    this.typingGame_data.mustEnteredKeys = [];
 
                     this.startTypingGame();
                 }
@@ -117,14 +117,30 @@ class App {
             this.eventHandlers = [];
         }
 
+        // 問題認識関数（問題から入力しなければならないキーを生成し保存）
+        let generateMustEnteredKeys = () => {
+            if(!this.typingGame_data.questionContents) return false;
+
+            let questionContent = this.typingGame_data.questionContents[this.typingGame_data.currentQuestionIndex].characters;
+            if(!questionContent) return false;
+
+            this.typingGame_data.mustEnteredKeys = [];
+
+            for(let i = 0; i < questionContent.length; i++) {
+                let romajiArray = questionContent[i].romaji.split(''); // 'waga' -> [ 'w', 'a', 'g', 'a' ]
+
+                for(let j = 0; j < romajiArray.length; j++) {
+                    this.typingGame_data.mustEnteredKeys.push(romajiArray[j]); // 配列の末尾に要素を追加
+                }
+            }
+        }
+
         // 問題表示関数
         let renderingQuestion = () => {
             if(!this.typingGame_data.questionContents) return false;
 
             let questionContent = this.typingGame_data.questionContents[this.typingGame_data.currentQuestionIndex].characters;
             if(!questionContent) return false;
-
-            this.typingGame_data.enteredKeys = [ 'w', 'a', 'g', 'a', 'h', 's', 'i', 'h', 'a' ];
 
             let textString   = ''; // 表示する問題文（例: 吾輩は猫である）
             let romajiString = ''; // 表示するローマ文字列（例: wagahaihanekodearu）
@@ -153,23 +169,26 @@ class App {
 
                 let option_begin = '';
                 let option_end   = '';
-
                 option_begin = state == 2 ? '<span class="opacity05">' : option_begin;
                 option_end   = state == 2 ? '</span>' : option_end;
                 option_begin = state == 3 ? '<span class="colorRed">' : option_begin;
                 option_end   = state == 3 ? '</span>' : option_end;
-                
+
                 textString   += option_begin + questionContent[i].text + option_end;
                 romajiString += option_begin + questionContent[i].romaji + option_end;
 
                 if(state == 3) state = 2;
             }
-            
+
             document.querySelector('.typingGame h2').innerHTML = textString;
             document.querySelector('.typingGame p') .innerHTML = romajiString;
         };
 
-        renderingQuestion();
+        // ゲームの状況に応じて関数実行
+        if(!this.typingGame_data.mustEnteredKeys.length) {
+            renderingQuestion();
+            generateMustEnteredKeys();
+        }
 
         // キー入力イベントを追加
         let eventHandler = {
