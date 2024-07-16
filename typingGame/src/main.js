@@ -73,7 +73,7 @@ class App {
         }
 
         // UIを構築し描画
-        let typingGameElement = '<div class="typingGame"><div class="time">00:00.00</div><h2>Enterキーを押すとゲームが始まります。</h2><p></p><button onclick="app.title();">やめる</button></div>';
+        let typingGameElement = '<div class="typingGame"><div class="time">00:00.00</div><h2></h2><p>Enterキーを押すとゲームが始まります。</p><button onclick="app.title();">やめる</button></div>';
         let containerElement  = '<div class="container">' + typingGameElement + '</div>';
         let mainElement       = '<main>' + containerElement + '</main>';
 
