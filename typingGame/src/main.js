@@ -197,8 +197,6 @@ class App {
                     }
                 }
 
-                this.typingGame_data.typingCount++;
-
                 if(event.key == this.typingGame_data.mustEnteredKeys[i].character) {
                     this.typingGame_data.mustEnteredKeys[i].state = 'entered';
 
@@ -218,6 +216,8 @@ class App {
 
                     this.typingGame_data.missCount++;
                 }
+
+                this.typingGame_data.typingCount++;
 
                 renderingQuestion();
             }
