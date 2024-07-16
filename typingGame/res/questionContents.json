@@ -136,7 +136,7 @@
                 "text": "ん",
                 "hiragana": "ん",
                 "katakana": "",
-                "romaji": "n"
+                "romaji": "nn"
             },
             {
                 "text": "に",
@@ -148,7 +148,7 @@
                 "text": "ち",
                 "hiragana": "ち",
                 "katakana": "",
-                "romaji": "chi"
+                "romaji": "ti"
             },
             {
                 "text": "は",
@@ -213,13 +213,13 @@
                 "text": "三",
                 "hiragana": "さん",
                 "katakana": "サン",
-                "romaji": "san"
+                "romaji": "sann"
             },
             {
                 "text": "文",
                 "hiragana": "もん",
                 "katakana": "モン",
-                "romaji": "mon"
+                "romaji": "monn"
             },
             {
                 "text": "の",
@@ -248,7 +248,7 @@
                 "text": "ん",
                 "hiragana": "ん",
                 "katakana": "",
-                "romaji": "n"
+                "romaji": "nn"
             },
             {
                 "text": "に",
@@ -260,7 +260,7 @@
                 "text": "ち",
                 "hiragana": "ち",
                 "katakana": "",
-                "romaji": "chi"
+                "romaji": "ti"
             },
             {
                 "text": "は",
@@ -287,10 +287,16 @@
                 "romaji": "ha"
             },
             {
-                "text": "良い",
-                "hiragana": "いい",
+                "text": "良",
+                "hiragana": "い",
                 "katakana": "",
-                "romaji": "ii"
+                "romaji": "i"
+            },
+            {
+                "text": "い",
+                "hiragana": "い",
+                "katakana": "",
+                "romaji": "i"
             },
             {
                 "text": "天",

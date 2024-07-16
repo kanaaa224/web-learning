@@ -150,26 +150,33 @@ class App {
             for(let i = 0; i < questionContent.length; i++) {
                 let romajiArray = questionContent[i].romaji.split(''); // 'waga' -> [ 'w', 'a', 'g', 'a' ]
 
-                let state = '';
+                let stateA = '';
+                let stateB = '';
 
                 let option_begin = '';
                 let option_end   = '';
 
                 for(let j = 0; j < romajiArray.length; j++) {
                     if(romajiArray[j] == this.typingGame_data.mustEnteredKeys[checked_mustEnteredKeys_index].character) {
-                        state = this.typingGame_data.mustEnteredKeys[checked_mustEnteredKeys_index].state;
+                        stateA = this.typingGame_data.mustEnteredKeys[checked_mustEnteredKeys_index].state;
+                        if(stateB != 'miss') stateB = stateA;
                         checked_mustEnteredKeys_index++;
                     };
 
-                    option_begin = state == 'not-entered' ? '<span class="opacity05">' : option_begin;
-                    option_end   = state == 'not-entered' ? '</span>' : option_end;
-                    option_begin = state == 'miss' ? '<span class="colorRed">' : option_begin;
-                    option_end   = state == 'miss' ? '</span>' : option_end;
+                    option_begin = stateA == 'not-entered' ? '<span class="opacity05">' : option_begin;
+                    option_end   = stateA == 'not-entered' ? '</span>' : option_end;
+                    option_begin = stateA == 'miss' ? '<span class="colorRed">' : option_begin;
+                    option_end   = stateA == 'miss' ? '</span>' : option_end;
 
                     romajiString += option_begin + romajiArray[j] + option_end;
                 }
 
-                textString   += option_begin + questionContent[i].text + option_end;
+                option_begin = stateB == 'not-entered' ? '<span class="opacity05">' : option_begin;
+                option_end   = stateB == 'not-entered' ? '</span>' : option_end;
+                option_begin = stateB == 'miss' ? '<span class="colorRed">' : option_begin;
+                option_end   = stateB == 'miss' ? '</span>' : option_end;
+
+                textString += option_begin + questionContent[i].text + option_end;
             }
 
             document.querySelector('.typingGame h2').innerHTML = textString;
@@ -273,7 +280,7 @@ class App {
 
         // UIを更新
         document.querySelector('.typingGame h2').innerHTML = 'クリア数: ' + this.typingGame_data.currentQuestionIndex + '/' + this.typingGame_data.questionContents.length;
-        document.querySelector('.typingGame p') .innerHTML = ('総タイプ数: ' + this.typingGame_data.typingCount) + '<br>' + ('ミス数: ' + this.typingGame_data.missCount) + '<br>' + ('当たり数: ' + this.typingGame_data.clearCount);
+        document.querySelector('.typingGame p') .innerHTML = ('総タイプ数: ' + this.typingGame_data.typingCount) + '<br>' + ('誤タイプ数: ' + this.typingGame_data.missCount) + '<br>' + ('正タイプ数: ' + this.typingGame_data.clearCount);
 
         document.querySelector('.typingGame button').setAttribute('onclick', 'app.title();');
         document.querySelector('.typingGame button').innerHTML = 'タイトルへ';
