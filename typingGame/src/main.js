@@ -84,15 +84,15 @@ class App {
             'typeName': 'keydown',
             'callback': event => {
                 if(event.key === 'Enter') {
-                    this.typingGame_data.time = [ 0, 0, 0 ];
+                    this.typingGame_data.time = [ 0, 0, 0 ]; // クリアタイム
 
-                    this.typingGame_data.typingCount = 0;
-                    this.typingGame_data.missCount   = 0;
-                    this.typingGame_data.clearCount  = 0;
+                    this.typingGame_data.typingCount = 0; // 総タイプ数
+                    this.typingGame_data.missCount   = 0; // 誤タイプ数
+                    this.typingGame_data.clearCount  = 0; // 正タイプ数
 
-                    this.typingGame_data.currentQuestionIndex = 0;
+                    this.typingGame_data.currentQuestionIndex = 0; // 現在の問題のインデックス（.questionContentsに対応）
 
-                    this.typingGame_data.mustEnteredKeys = [];
+                    this.typingGame_data.mustEnteredKeys = []; // 現在の問題で入力しなけれならないキー
 
                     this.startTypingGame();
                 }
@@ -127,10 +127,10 @@ class App {
             this.typingGame_data.mustEnteredKeys = [];
 
             for(let i = 0; i < questionContent.length; i++) {
-                let romajiArray = questionContent[i].romaji.split(''); // 'waga' -> [ 'w', 'a', 'g', 'a' ]
+                let romajiArray = questionContent[i].romaji.split(''); // 文字列を一文字ずつ分割
 
                 for(let j = 0; j < romajiArray.length; j++) {
-                    this.typingGame_data.mustEnteredKeys.push(romajiArray[j]); // 配列の末尾に要素を追加
+                    this.typingGame_data.mustEnteredKeys.push({ 'character': romajiArray[j], 'state': 'not-entered' }); // 配列の末尾に要素を追加
                 }
             }
         }
@@ -145,39 +145,31 @@ class App {
             let textString   = ''; // 表示する問題文（例: 吾輩は猫である）
             let romajiString = ''; // 表示するローマ文字列（例: wagahaihanekodearu）
 
-            let state = 0; // 解答状態（1: 正解 / 2: 未回答 / 3: ミス）
-
-            let checkedEnterdKeyIndex = 0; // 入力済みキーのチェック済みインデックス
+            let checked_mustEnteredKeys_index = 0; // チェック済みの問題キー配列のインデックス
 
             for(let i = 0; i < questionContent.length; i++) {
-                if(state <= 1) {
-                    let romajiArray = questionContent[i].romaji.split(''); // 'waga' -> [ 'w', 'a', 'g', 'a' ]
+                let romajiArray = questionContent[i].romaji.split(''); // 'waga' -> [ 'w', 'a', 'g', 'a' ]
 
-                    for(let j = 0; j < romajiArray.length; j++) {
-                        if(!this.typingGame_data.enteredKeys[checkedEnterdKeyIndex]) {
-                            state = 2;
-                        } else if(romajiArray[j] == this.typingGame_data.enteredKeys[checkedEnterdKeyIndex]) {
-                            checkedEnterdKeyIndex++;
-                            state = 1;
-                        } else {
-                            state = 3;
-                        }
-                    }
-                }
-
-                console.log(state);
+                let state = '';
 
                 let option_begin = '';
                 let option_end   = '';
-                option_begin = state == 2 ? '<span class="opacity05">' : option_begin;
-                option_end   = state == 2 ? '</span>' : option_end;
-                option_begin = state == 3 ? '<span class="colorRed">' : option_begin;
-                option_end   = state == 3 ? '</span>' : option_end;
+
+                for(let j = 0; j < romajiArray.length; j++) {
+                    if(romajiArray[j] == this.typingGame_data.mustEnteredKeys[checked_mustEnteredKeys_index].character) {
+                        state = this.typingGame_data.mustEnteredKeys[checked_mustEnteredKeys_index].state;
+                        checked_mustEnteredKeys_index++;
+                    };
+
+                    option_begin = state == 'not-entered' ? '<span class="opacity05">' : option_begin;
+                    option_end   = state == 'not-entered' ? '</span>' : option_end;
+                    option_begin = state == 'miss' ? '<span class="colorRed">' : option_begin;
+                    option_end   = state == 'miss' ? '</span>' : option_end;
+
+                    romajiString += option_begin + romajiArray[j] + option_end;
+                }
 
                 textString   += option_begin + questionContent[i].text + option_end;
-                romajiString += option_begin + questionContent[i].romaji + option_end;
-
-                if(state == 3) state = 2;
             }
 
             document.querySelector('.typingGame h2').innerHTML = textString;
@@ -186,8 +178,8 @@ class App {
 
         // ゲームの状況に応じて関数実行
         if(!this.typingGame_data.mustEnteredKeys.length) {
-            renderingQuestion();
             generateMustEnteredKeys();
+            renderingQuestion();
         }
 
         // キー入力イベントを追加
@@ -195,8 +187,37 @@ class App {
             'typeName': 'keydown',
             'callback': event => {
                 if(event.key === 'Escape') return this.endTypingGame();
-                console.log(event.key);
-                //console.log('error: 出題データがありません');
+
+                let i;
+                for(i = 0; i < this.typingGame_data.mustEnteredKeys.length; i++) {
+                    if(this.typingGame_data.mustEnteredKeys[i].state != 'entered') {
+                        break;
+                    }
+                }
+
+                this.typingGame_data.typingCount++;
+
+                if(event.key == this.typingGame_data.mustEnteredKeys[i].character) {
+                    this.typingGame_data.mustEnteredKeys[i].state = 'entered';
+
+                    if(i >= (this.typingGame_data.mustEnteredKeys.length - 1)) {
+                        if(this.typingGame_data.currentQuestionIndex >= (this.typingGame_data.questionContents.length - 1)) {
+                            this.typingGame_data.currentQuestionIndex++;
+                            return this.endTypingGame();
+                        } else {
+                            this.typingGame_data.currentQuestionIndex++;
+                            generateMustEnteredKeys();
+                        }
+                    }
+
+                    this.typingGame_data.clearCount++;
+                } else {
+                    this.typingGame_data.mustEnteredKeys[i].state = 'miss';
+
+                    this.typingGame_data.missCount++;
+                }
+
+                renderingQuestion();
             }
         };
 

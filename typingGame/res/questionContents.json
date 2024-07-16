@@ -183,77 +183,6 @@
         ]
     },
     {
-        "string": "明日の天気はどうですか？",
-        "characters": [
-            {
-                "text": "明",
-                "hiragana": "あす",
-                "katakana": "アス",
-                "romaji": "asu"
-            },
-            {
-                "text": "日",
-                "hiragana": "ひ",
-                "katakana": "ヒ",
-                "romaji": "hi"
-            },
-            {
-                "text": "の",
-                "hiragana": "の",
-                "katakana": "ノ",
-                "romaji": "no"
-            },
-            {
-                "text": "天",
-                "hiragana": "てん",
-                "katakana": "テン",
-                "romaji": "ten"
-            },
-            {
-                "text": "気",
-                "hiragana": "き",
-                "katakana": "キ",
-                "romaji": "ki"
-            },
-            {
-                "text": "は",
-                "hiragana": "は",
-                "katakana": "ハ",
-                "romaji": "ha"
-            },
-            {
-                "text": "ど",
-                "hiragana": "ど",
-                "katakana": "ド",
-                "romaji": "do"
-            },
-            {
-                "text": "う",
-                "hiragana": "う",
-                "katakana": "ウ",
-                "romaji": "u"
-            },
-            {
-                "text": "です",
-                "hiragana": "です",
-                "katakana": "デス",
-                "romaji": "desu"
-            },
-            {
-                "text": "か",
-                "hiragana": "か",
-                "katakana": "カ",
-                "romaji": "ka"
-            },
-            {
-                "text": "？",
-                "hiragana": "？",
-                "katakana": "？",
-                "romaji": "?"
-            }
-        ]
-    },
-    {
         "string": "早起きは三文の徳",
         "characters": [
             {
@@ -288,9 +217,9 @@
             },
             {
                 "text": "文",
-                "hiragana": "ぶん",
-                "katakana": "ブン",
-                "romaji": "bun"
+                "hiragana": "もん",
+                "katakana": "モン",
+                "romaji": "mon"
             },
             {
                 "text": "の",
@@ -346,16 +275,10 @@
                 "romaji": ","
             },
             {
-                "text": "今",
-                "hiragana": "いま",
+                "text": "今日",
+                "hiragana": "きょう",
                 "katakana": "",
-                "romaji": "ima"
-            },
-            {
-                "text": "日",
-                "hiragana": "ひ",
-                "katakana": "",
-                "romaji": "hi"
+                "romaji": "kyou"
             },
             {
                 "text": "は",
@@ -364,16 +287,10 @@
                 "romaji": "ha"
             },
             {
-                "text": "良",
-                "hiragana": "よ",
+                "text": "良い",
+                "hiragana": "いい",
                 "katakana": "",
-                "romaji": "yo"
-            },
-            {
-                "text": "い",
-                "hiragana": "い",
-                "katakana": "",
-                "romaji": "i"
+                "romaji": "ii"
             },
             {
                 "text": "天",
