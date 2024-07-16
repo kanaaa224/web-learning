@@ -188,6 +188,8 @@ class App {
             'callback': event => {
                 if(event.key === 'Escape') return this.endTypingGame();
 
+                if(event.key === 'Shift') return;
+
                 let i;
                 for(i = 0; i < this.typingGame_data.mustEnteredKeys.length; i++) {
                     if(this.typingGame_data.mustEnteredKeys[i].state != 'entered') {
