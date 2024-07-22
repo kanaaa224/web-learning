@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 * {
-    box-sizing: border-box;
+    box-sizing: border-box; /* 全ての要素のサイズ計算にborder/paddingを含ませる */
 }
 
 body {

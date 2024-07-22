@@ -15,6 +15,8 @@ class App {
         this.eventHandlers = []; // イベントハンドラー管理用
         this.intervals     = []; // インターバル管理用
 
+        this.contentsDataFilePath = './res/questionContents.json'; // 問題データファイルのパス
+
         // ページのロードが完了したとき、タイトル画面を描画する関数を実行する
         window.addEventListener('load', () => {
             this.title();
@@ -23,8 +25,9 @@ class App {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    // jsonファイルを読み込む
+    // jsonファイルを読み込む（読み込みが成功したら引数で渡された関数を実行する）
     fetchJSON(filePath = '', callback = () => {}) {
+        // FetchAPI | 非同期（リロードせずに）にネットワーク越しでリソースを取得できる
         fetch(filePath)
             .then(response => response.json())
             .then(data => callback(data))
@@ -61,11 +64,11 @@ class App {
         return true;
     }
 
-    // タイピングゲームを準備
+    // タイピングゲームを準備（Enterキーが押されたらゲームの初期化と開始を行う）
     playTypingGame() {
         // タイピングゲームのデータがない場合、出題データファイルをフェッチして自分をコールバックする
         if(!this.typingGame_data) {
-            return this.fetchJSON('./res/questionContents.json', (data) => {
+            return this.fetchJSON(this.contentsDataFilePath, (data) => {
                 this.typingGame_data = { 'questionContents': data };
 
                 this.playTypingGame();
@@ -79,34 +82,32 @@ class App {
 
         document.querySelector('body').innerHTML = mainElement;
 
-        // キー入力イベントを追加
+        // キー入力イベントリスナーを追加（Enterキーが押下されたらゲームを開始する）
         let eventHandler = {
             'typeName': 'keydown',
             'callback': event => {
                 if(event.key === 'Enter') {
-                    this.typingGame_data.time = [ 0, 0, 0 ]; // クリアタイム
+                    this.typingGame_data.time = [ 0, 0, 0 ]; // クリアタイム（00:00.00）
 
                     this.typingGame_data.typingCount = 0; // 総タイプ数
                     this.typingGame_data.missCount   = 0; // 誤タイプ数
                     this.typingGame_data.clearCount  = 0; // 正タイプ数
 
                     this.typingGame_data.currentQuestionIndex = 0; // 現在の問題のインデックス（.questionContentsに対応）
+                    this.typingGame_data.mustEnteredKeys = [];     // 現在の問題で入力しなければならないキーの状態が入る変数
 
-                    this.typingGame_data.mustEnteredKeys = []; // 現在の問題で入力しなけれならないキー
-
-                    this.startTypingGame();
+                    this.startTypingGame(); // Enterキー押下でゲーム開始
                 }
             }
         };
 
         this.eventHandlers[0] = eventHandler;
-
         document.addEventListener(eventHandler.typeName, eventHandler.callback);
 
         return true;
     }
 
-    // タイピングゲームを開始
+    // タイピングゲームを開始（タイム、入力の判定などゲームの進行を行う）
     startTypingGame() {
         // 全てのイベントハンドラーを解除（この関数の前に実行された関数でリスナーされたイベントのハンドラーは全て不要なため）
         if(this.eventHandlers.length) {
@@ -117,7 +118,7 @@ class App {
             this.eventHandlers = [];
         }
 
-        // 問題認識関数（問題から入力しなければならないキーを生成し保存）
+        // 問題認識関数定義（問題から入力しなければならないキーを生成しグローバル変数へ保存）
         let generateMustEnteredKeys = () => {
             if(!this.typingGame_data.questionContents) return false;
 
@@ -135,7 +136,7 @@ class App {
             }
         }
 
-        // 問題表示関数
+        // 問題表示関数定義（問題の文字列と入力済みの文字列を比較し、その結果に応じた問題の表示を行う。グローバル変数の書き込み処理は無し）
         let renderingQuestion = () => {
             if(!this.typingGame_data.questionContents) return false;
 
@@ -150,19 +151,22 @@ class App {
             for(let i = 0; i < questionContent.length; i++) {
                 let romajiArray = questionContent[i].romaji.split(''); // 'waga' -> [ 'w', 'a', 'g', 'a' ]
 
-                let stateA = '';
-                let stateB = '';
+                let stateA = ''; // ローマ文字列の表示状態
+                let stateB = ''; // 問題文の表示状態
 
-                let option_begin = '';
-                let option_end   = '';
+                let option_begin = ''; // 未入力・ミス時のスタイル（クラス）を割り当てるためのクラス開始文字列
+                let option_end   = ''; // 未入力・ミス時のスタイル（クラス）を割り当てるためのクラス終了文字列
 
+                // ローマ文字列を一文字ずつ判定する
                 for(let j = 0; j < romajiArray.length; j++) {
+                    // ユーザーの入力に応じた結果をローカル変数へコピー
                     if(romajiArray[j] == this.typingGame_data.mustEnteredKeys[checked_mustEnteredKeys_index].character) {
                         stateA = this.typingGame_data.mustEnteredKeys[checked_mustEnteredKeys_index].state;
                         if(stateB != 'miss') stateB = stateA;
                         checked_mustEnteredKeys_index++;
                     };
 
+                    // 結果に応じてスタイル（クラス）を設定し、出力
                     option_begin = stateA == 'not-entered' ? '<span class="opacity05">' : option_begin;
                     option_end   = stateA == 'not-entered' ? '</span>' : option_end;
                     option_begin = stateA == 'miss' ? '<span class="colorRed">' : option_begin;
@@ -171,6 +175,7 @@ class App {
                     romajiString += option_begin + romajiArray[j] + option_end;
                 }
 
+                // 結果に応じてスタイル（クラス）を設定し、出力
                 option_begin = stateB == 'not-entered' ? '<span class="opacity05">' : option_begin;
                 option_end   = stateB == 'not-entered' ? '</span>' : option_end;
                 option_begin = stateB == 'miss' ? '<span class="colorRed">' : option_begin;
@@ -183,27 +188,31 @@ class App {
             document.querySelector('.typingGame p') .innerHTML = romajiString;
         };
 
-        // ゲームの状況に応じて関数実行
+        // ゲーム開始時のみ、問題生成関数と問題描画関数を実行
         if(!this.typingGame_data.mustEnteredKeys.length) {
             generateMustEnteredKeys();
             renderingQuestion();
         }
 
-        // キー入力イベントを追加
+        // キー入力イベントリスナーを追加（ユーザーの入力から問題の結果判定を行う）
         let eventHandler = {
             'typeName': 'keydown',
             'callback': event => {
-                if(event.key === 'Escape') return this.endTypingGame();
+                if(event.key === 'Escape') return this.endTypingGame(); // Escapeキー押下時、ゲームを終了させる
 
-                if(event.key === 'Shift') return;
+                if(event.key === 'Shift') return; // Shiftキーは無視する
 
                 let i;
+                // ユーザーが入力した文字列から、結果が未入力・ミスの状態の文字を見つける
                 for(i = 0; i < this.typingGame_data.mustEnteredKeys.length; i++) {
                     if(this.typingGame_data.mustEnteredKeys[i].state != 'entered') {
                         break;
                     }
                 }
 
+                // 上のループで見つけた文字と入力された文字が一致した場合、入力済みの状態を保存
+                // 一致しなかった場合はミスの状態を保存する
+                // 一致したとき、問題の文字列の最後の文字の判定だった場合、かつ問題が最後だった場合はゲーム終了のグローバル関数を返し、まだの場合は次の問題を生成・表示する
                 if(event.key == this.typingGame_data.mustEnteredKeys[i].character) {
                     this.typingGame_data.mustEnteredKeys[i].state = 'entered';
 
@@ -217,39 +226,43 @@ class App {
                         }
                     }
 
-                    this.typingGame_data.clearCount++;
+                    this.typingGame_data.clearCount++; // 正タイプ数をカウント
                 } else {
                     this.typingGame_data.mustEnteredKeys[i].state = 'miss';
 
-                    this.typingGame_data.missCount++;
+                    this.typingGame_data.missCount++; // 誤タイプ数をカウント
                 }
 
-                this.typingGame_data.typingCount++;
+                this.typingGame_data.typingCount++; // 総タイプ数をカウント
 
                 renderingQuestion();
             }
         };
 
         this.eventHandlers[1] = eventHandler;
-
         document.addEventListener(eventHandler.typeName, eventHandler.callback);
 
-        // タイムを表示するため更新と表示のインターバルを登録
-        this.intervals.push(setInterval(() => {
-            this.typingGame_data.time[0]++;
-        }, 60 * 1000));
-
-        this.intervals.push(setInterval(() => {
-            this.typingGame_data.time[1]++;
-            if(this.typingGame_data.time[1] >= 60) this.typingGame_data.time[1] = 0;
-        }, 1000));
-
-        this.intervals.push(setInterval(() => {
-            this.typingGame_data.time[2]++;
-            if(this.typingGame_data.time[2] >= 100) this.typingGame_data.time[2] = 0;
-
-            document.querySelector('.typingGame .time').innerHTML = this.twoDigit(this.typingGame_data.time[0]) + ':' + this.twoDigit(this.typingGame_data.time[1]) + '.' + this.twoDigit(this.typingGame_data.time[2]);
-        }, 10));
+        // タイムの更新と表示のインターバルを登録
+        if(true) {
+            // 分の更新
+            this.intervals.push(setInterval(() => {
+                this.typingGame_data.time[0]++; // min
+            }, 60 * 1000));
+    
+            // 秒の更新
+            this.intervals.push(setInterval(() => {
+                this.typingGame_data.time[1]++; // sec
+                if(this.typingGame_data.time[1] >= 60) this.typingGame_data.time[1] = 0;
+            }, 1000));
+    
+            // コンマ秒の更新と表示
+            this.intervals.push(setInterval(() => {
+                this.typingGame_data.time[2]++; // sec point (00:00.XX)
+                if(this.typingGame_data.time[2] >= 100) this.typingGame_data.time[2] = 0;
+    
+                document.querySelector('.typingGame .time').innerHTML = this.twoDigit(this.typingGame_data.time[0]) + ':' + this.twoDigit(this.typingGame_data.time[1]) + '.' + this.twoDigit(this.typingGame_data.time[2]);
+            }, 10));
+        }
 
         // UIを更新
         document.querySelector('.typingGame button').setAttribute('onclick', 'app.endTypingGame();');
@@ -258,7 +271,7 @@ class App {
         return true;
     }
 
-    // タイピングゲームを終了
+    // タイピングゲームを終了（ゲームの結果を表示する）
     endTypingGame() {
         // 全てのイベントハンドラーを解除（この関数の前に実行された関数でリスナーされたイベントのハンドラーは全て不要なため）
         if(this.eventHandlers.length) {
@@ -289,4 +302,4 @@ class App {
     }
 }
 
-const app = new App();
+const app = new App(); // Appインスタンス生成
