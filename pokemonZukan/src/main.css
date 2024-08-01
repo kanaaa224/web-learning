@@ -1,0 +1,233 @@
+@charset "UTF-8";
+
+/* ---------------------------------------------------------------------------------------------- */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+/* ---------------------------------------------------------------------------------------------- */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+
+    overflow: hidden auto;
+
+    font-family: sans-serif;
+
+    background-color: #333;
+    color: #fff;
+
+    a {
+        color: inherit;
+    }
+
+    .clickable {
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .clickable:hover {
+        opacity: 0.7;
+        box-shadow: none;
+    }
+
+    .clickable:active {
+        opacity: 0.5;
+        box-shadow: none;
+    }
+
+    .disable {
+        opacity: 0.5;
+
+        pointer-events: none;
+        user-select: none;
+    }
+}
+
+main .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .cards {
+        position: absolute;
+
+        min-width: 100%;
+        min-height: 100%;
+
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+
+        background-color: #eff3ff;
+
+        .card {
+            width: 18rem;
+            height: 25rem;
+
+            margin: 2rem;
+
+            color: #000;
+
+            font-family: 'Poppins', sans-serif;
+
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.15);
+
+            border-radius: 1rem;
+
+            cursor: pointer;
+            user-select: none;
+
+            img {
+                width: 7.5rem;
+                height: 7.5rem;
+                max-height: 7.5rem;
+
+                margin: auto;
+
+                display: block;
+            }
+
+            .badges {
+                margin: 1rem;
+
+                display: flex;
+                justify-content: space-between;
+
+                .badge {
+                    width: 5rem;
+
+                    padding: 0.5rem 0;
+
+                    background-color: #fff;
+
+                    border-radius: 2rem;
+
+                    font-weight: 400;
+                    text-align: center;
+
+                    span {
+                        font-size: 0.75rem;
+                        font-weight: 600;
+
+                        letter-spacing: 0;
+                    }
+                }
+            }
+
+            .name {
+                margin: 0;
+
+                font-weight: 600;
+                text-align: center;
+            }
+
+            .types {
+                display: flex;
+                justify-content: space-evenly;
+                margin: 1rem 0;
+
+                span {
+                    padding: 0.25rem 1.25rem;
+
+                    color: #fff;
+
+                    border-radius: 1rem;
+
+                    font-size: 0.75rem;
+                    font-weight: 600;
+
+                    letter-spacing: 0;
+                }
+            }
+
+            .stats {
+                display: flex;
+                align-items: center;
+                justify-content: space-evenly;
+                text-align: center;
+
+                h3 {
+                    margin: 0;
+                }
+
+                p {
+                    margin: 0;
+                    color: #404060;
+                }
+            }
+        }
+
+        .card:hover {
+            opacity: 0.75;
+        }
+
+        .card:active {
+            opacity: 0.5;
+            box-shadow: none;
+        }
+    }
+
+    button {
+        padding: 1rem 4rem;
+
+        display: block;
+
+        background: #101010;
+        color: #fff;
+
+        font-size: 1rem;
+
+        border: none;
+        border-radius: 0.5rem;
+    }
+}
+
+footer .container {
+    position: fixed;
+    bottom: 0;
+
+    width: 100%;
+
+    padding: 0 0 1rem 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: #000;
+
+    p {
+        margin: 0;
+        font-size: 0.75rem;
+    }
+}
+
+/* ---------------------------------------------------------------------------------------------- */
+
+@media screen and (max-width: 480px) {
+    body {
+        .clickable:hover {
+            opacity: 1.0;
+        }
+
+        .clickable:active {
+            opacity: 0.5;
+        }
+    }
+}
+
+@media screen and (max-width: 959px) {
+    body {
+        .clickable:hover {
+            opacity: 1.0;
+        }
+
+        .clickable:active {
+            opacity: 0.5;
+        }
+    }
+}
