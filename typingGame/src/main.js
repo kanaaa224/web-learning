@@ -31,14 +31,14 @@ class App {
         fetch(filePath)
             .then(response => response.json())
             .then(data => callback(data))
-            .catch(error => console.error('fetching error: ', error));
+            .catch(error => console.error(`fetching error: ${error}`));
 
         return true;
     }
 
     // 「1」を「01」にしてくれる関数
     twoDigit(num) {
-        return num < 10 ? '0' + num : num.toString();
+        return num < 10 ? `0${num}` : num.toString();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,9 +55,9 @@ class App {
         }
 
         // UIを構築し描画
-        let titleElement     = '<div class="title"><h1>タイピングゲーム</h1><button onclick="app.playTypingGame();">ゲーム開始</button></div>';
-        let containerElement = '<div class="container">' + titleElement + '</div>';
-        let mainElement      = '<main>' + containerElement + '</main>';
+        let titleElement     = `<div class="title"><h1>タイピングゲーム</h1><button onclick="app.playTypingGame();">ゲーム開始</button></div>`;
+        let containerElement = `<div class="container">${titleElement}</div>`;
+        let mainElement      = `<main>${containerElement}</main>`;
 
         document.querySelector('body').innerHTML = mainElement;
 
@@ -69,23 +69,23 @@ class App {
         // タイピングゲームのデータがない場合、出題データファイルをフェッチして自分をコールバックする
         if(!this.typingGame_data) {
             return this.fetchJSON(this.contentsDataFilePath, (data) => {
-                this.typingGame_data = { 'questionContents': data };
+                this.typingGame_data = { questionContents: data };
 
                 this.playTypingGame();
             });
         }
 
         // UIを構築し描画
-        let typingGameElement = '<div class="typingGame"><div class="time">00:00.00</div><h2></h2><p>Enterキーを押すとゲームが始まります。</p><button onclick="app.title();">やめる</button></div>';
-        let containerElement  = '<div class="container">' + typingGameElement + '</div>';
-        let mainElement       = '<main>' + containerElement + '</main>';
+        let typingGameElement = `<div class="typingGame"><div class="time">00:00.00</div><h2></h2><p>Enterキーを押すとゲームが始まります。</p><button onclick="app.title();">やめる</button></div>`;
+        let containerElement  = `<div class="container">${typingGameElement}</div>`;
+        let mainElement       = `<main>${containerElement}</main>`;
 
         document.querySelector('body').innerHTML = mainElement;
 
         // キー入力イベントリスナーを追加（Enterキーが押下されたらゲームを開始する）
         let eventHandler = {
-            'typeName': 'keydown',
-            'callback': event => {
+            typeName: 'keydown',
+            callback: event => {
                 if(event.key === 'Enter') {
                     this.typingGame_data.time = [ 0, 0, 0 ]; // クリアタイム（00:00.00）
 
@@ -131,7 +131,7 @@ class App {
                 let romajiArray = questionContent[i].romaji.split(''); // 文字列を一文字ずつ分割
 
                 for(let j = 0; j < romajiArray.length; j++) {
-                    this.typingGame_data.mustEnteredKeys.push({ 'character': romajiArray[j], 'state': 'not-entered' }); // 配列の末尾に要素を追加
+                    this.typingGame_data.mustEnteredKeys.push({ character: romajiArray[j], state: 'not-entered' }); // 配列の末尾に要素を追加
                 }
             }
         }
@@ -167,19 +167,19 @@ class App {
                     };
 
                     // 結果に応じてスタイル（クラス）を設定し、出力
-                    option_begin = stateA == 'not-entered' ? '<span class="opacity05">' : option_begin;
-                    option_end   = stateA == 'not-entered' ? '</span>' : option_end;
-                    option_begin = stateA == 'miss' ? '<span class="colorRed">' : option_begin;
-                    option_end   = stateA == 'miss' ? '</span>' : option_end;
+                    option_begin = stateA == 'not-entered' ? `<span class="opacity05">` : option_begin;
+                    option_end   = stateA == 'not-entered' ? `</span>` : option_end;
+                    option_begin = stateA == 'miss' ? `<span class="colorRed">` : option_begin;
+                    option_end   = stateA == 'miss' ? `</span>` : option_end;
 
                     romajiString += option_begin + romajiArray[j] + option_end;
                 }
 
                 // 結果に応じてスタイル（クラス）を設定し、出力
-                option_begin = stateB == 'not-entered' ? '<span class="opacity05">' : option_begin;
-                option_end   = stateB == 'not-entered' ? '</span>' : option_end;
-                option_begin = stateB == 'miss' ? '<span class="colorRed">' : option_begin;
-                option_end   = stateB == 'miss' ? '</span>' : option_end;
+                option_begin = stateB == 'not-entered' ? `<span class="opacity05">` : option_begin;
+                option_end   = stateB == 'not-entered' ? `</span>` : option_end;
+                option_begin = stateB == 'miss' ? `<span class="colorRed">` : option_begin;
+                option_end   = stateB == 'miss' ? `</span>` : option_end;
 
                 textString += option_begin + questionContent[i].text + option_end;
             }
@@ -196,8 +196,8 @@ class App {
 
         // キー入力イベントリスナーを追加（ユーザーの入力から問題の結果判定を行う）
         let eventHandler = {
-            'typeName': 'keydown',
-            'callback': event => {
+            typeName: 'keydown',
+            callback: event => {
                 if(event.key === 'Escape') return this.endTypingGame(); // Escapeキー押下時、ゲームを終了させる
 
                 if(event.key === 'Shift') return; // Shiftキーは無視する
@@ -260,13 +260,13 @@ class App {
                 this.typingGame_data.time[2]++; // sec point (00:00.XX)
                 if(this.typingGame_data.time[2] >= 100) this.typingGame_data.time[2] = 0;
     
-                document.querySelector('.typingGame .time').innerHTML = this.twoDigit(this.typingGame_data.time[0]) + ':' + this.twoDigit(this.typingGame_data.time[1]) + '.' + this.twoDigit(this.typingGame_data.time[2]);
+                document.querySelector('.typingGame .time').innerHTML = `${this.twoDigit(this.typingGame_data.time[0])}:${this.twoDigit(this.typingGame_data.time[1])}.${this.twoDigit(this.typingGame_data.time[2])}`;
             }, 10));
         }
 
         // UIを更新
-        document.querySelector('.typingGame button').setAttribute('onclick', 'app.endTypingGame();');
-        document.querySelector('.typingGame button').innerHTML = '終わる(Escapeキーでも終了できます)';
+        document.querySelector('.typingGame button').setAttribute('onclick', `app.endTypingGame();`);
+        document.querySelector('.typingGame button').innerHTML = `終わる(Escapeキーでも終了できます)`;
 
         return true;
     }
@@ -292,11 +292,11 @@ class App {
         }
 
         // UIを更新
-        document.querySelector('.typingGame h2').innerHTML = 'クリア数: ' + this.typingGame_data.currentQuestionIndex + '/' + this.typingGame_data.questionContents.length;
-        document.querySelector('.typingGame p') .innerHTML = ('総タイプ数: ' + this.typingGame_data.typingCount) + '<br>' + ('誤タイプ数: ' + this.typingGame_data.missCount) + '<br>' + ('正タイプ数: ' + this.typingGame_data.clearCount);
+        document.querySelector('.typingGame h2').innerHTML = `クリア数: ${this.typingGame_data.currentQuestionIndex}/${this.typingGame_data.questionContents.length}`;
+        document.querySelector('.typingGame p') .innerHTML = `総タイプ数: ${this.typingGame_data.typingCount}<br>誤タイプ数: ${this.typingGame_data.missCount}<br>正タイプ数: ${this.typingGame_data.clearCount}`;
 
-        document.querySelector('.typingGame button').setAttribute('onclick', 'app.title();');
-        document.querySelector('.typingGame button').innerHTML = 'タイトルへ';
+        document.querySelector('.typingGame button').setAttribute('onclick', `app.title();`);
+        document.querySelector('.typingGame button').innerHTML = `タイトルへ`;
 
         return true;
     }
