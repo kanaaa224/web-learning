@@ -164,7 +164,7 @@ class App {
                         stateA = this.typingGame_data.mustEnteredKeys[checked_mustEnteredKeys_index].state;
                         if(stateB != 'miss') stateB = stateA;
                         checked_mustEnteredKeys_index++;
-                    };
+                    }
 
                     // 結果に応じてスタイル（クラス）を設定し、出力
                     option_begin = stateA == 'not-entered' ? `<span class="opacity05">` : option_begin;
@@ -248,18 +248,18 @@ class App {
             this.intervals.push(setInterval(() => {
                 this.typingGame_data.time[0]++; // min
             }, 60 * 1000));
-    
+
             // 秒の更新
             this.intervals.push(setInterval(() => {
                 this.typingGame_data.time[1]++; // sec
                 if(this.typingGame_data.time[1] >= 60) this.typingGame_data.time[1] = 0;
             }, 1000));
-    
+
             // コンマ秒の更新と表示
             this.intervals.push(setInterval(() => {
                 this.typingGame_data.time[2]++; // sec point (00:00.XX)
                 if(this.typingGame_data.time[2] >= 100) this.typingGame_data.time[2] = 0;
-    
+
                 document.querySelector('.typingGame .time').innerHTML = `${this.twoDigit(this.typingGame_data.time[0])}:${this.twoDigit(this.typingGame_data.time[1])}.${this.twoDigit(this.typingGame_data.time[2])}`;
             }, 10));
         }

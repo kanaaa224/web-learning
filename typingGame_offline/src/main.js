@@ -483,7 +483,7 @@ class App {
                         stateA = this.typingGame_data.mustEnteredKeys[checked_mustEnteredKeys_index].state;
                         if(stateB != 'miss') stateB = stateA;
                         checked_mustEnteredKeys_index++;
-                    };
+                    }
 
                     // 結果に応じてスタイル（クラス）を設定し、出力
                     option_begin = stateA == 'not-entered' ? `<span class="opacity05">` : option_begin;
